@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/aframe/dist/aframe-master.min.js">
+    </script>
+  </head>
+  
+<body>
+
+
+<script>
+
+// load cubes json
+// const fs = require('fs');
+// const cubesFile = fs.readFileSync('./cubes.json', 'utf8');
+// const cubes = JSON.parse(cubesFile);
+
+// console.log(cubes)
+
+// define cubes
+
+const boxes = '{"box":[{"position":"-3 0.5 -3", "color":"0xff0000", "scale":"1 1 1", "rotation":"30 50 60"},{"position":"-5 0.5 -3", "color":"0xff00ff", "scale":"1 1 1", "rotation":"30 50 60"},{"position":"3 0.5 -2", "color":"0xff0055", "scale":"1 1 1", "rotation":"60 50 60"},{"color":"0xff3300", "scale":"1 1 1", "rotation":"36 50 60", "translation": "15 5 5"},{"position":"1 0.5 -3","color":"0xff0022", "scale":"1 1 1", "rotation":"30 50 60"}]}';
+
+var boxes_object = JSON.parse(boxes);
+// accessing the object of json, which is cubes. Then access each one cube like an array using index.
+console.log(boxes_object.box[0].position);
+
+const ascene = document.createElement("a-scene");
+
+document.body.appendChild(ascene);
+
+// objects in scene
+const abox = document.createElement("a-box");
+const acylinder = document.createElement("a-entity");
+const entityEl = document.createElement('a-entity');
+
+// lights
+var ambientLight;
+var directionalLight;
+
+ambientLight = document.createElement('a-entity');
+
+ambientLight.setAttribute('light', {
+  type: 'ambient',
+  color: 'rgb(100%,0%,0%)',
+  intensity: 0.1
+
+});
+directionalLight = document.createElement('a-entity');
+directionalLight.setAttribute('light', {
+  color: '#FFF',
+  intensity: "0.5",
+  castShadow: true, 
+});
+
+directionalLight.setAttribute('position', {x: -0.5, y: 1, z: 1});
+
+// const gltf = document.createElement('a-gltf-model');
+
+// try to load gltf from file
+
+
+// for loop to add all cubes
+for (var i=0; i<boxes_object.box.length; i++) {
+  // console.log(cubes_object.cubes[i]);
+  var abox2 = document.createElement("a-entity");
+
+  abox2.setAttribute('geometry',{primitive: "box"},
+  'material',{color: boxes_object.box[i].color});
+  abox2.setAttribute("position", boxes_object.box[i].position)
+  abox2.setAttribute("scale", boxes_object.box[i].scale)
+  abox2.setAttribute("rotation", boxes_object.box[i].rotation)
+
+  ascene.appendChild(abox2);
+
+}
+
+
+const ass = document.createElement('a-asset-item');
+ass.setAttribute('id', 'flower');
+ass.setAttribute("src", "Flower.glb");
+const ass_entity = document.createElement("a-entity");
+const ass_entity_sky = document.createElement("a-entity");
+
+ass_entity_sky.setAttribute("gltf-model", "url(https://cdn.aframe.io/test-models/models/glTF-2.0/virtualcity/VC.gltf)");
+//ass_entity.setAttribute("scale", "0.01 0.01 0.01");
+ass_entity.setAttribute("gltf-model", "url(https://raw.githubusercontent.com/aframevr/assets/master/examples/ar/models/triceratops/scene.gltf)");
+
+
+// entityEl.setAttribute('light', {
+//   type: 'directional',
+//   color: 'rgb(100%,0%,0%)',
+//   intensity: "0.001",
+// });
+
+// gltf.setAttribute("source", "Flower.glb");
+// gltf.setAttribute("position", "1 0.75 -3");
+// gltf.setAttribute("scale","0.01 0.01 0.01");
+
+
+ass_entity.setAttribute("position", "-5 -30 -150");
+ass_entity.setAttribute("shader", "standard");
+
+abox.setAttribute("position", "-1 0.5 -3");
+abox.setAttribute("color", "red");
+abox.setAttribute("castShadow", "true");
+
+acylinder.setAttribute("position", "1 3 -3");
+// acylinder.setAttribute("color", "cyan");
+
+// the color should be in 'material' component, not 'geometry'
+acylinder.setAttribute('geometry',{
+  primitive: "cylinder",
+  radius: '0.5'
+}, 'material',{color: "cyan"});
+
+ascene.setAttribute("colorManagement", "true");
+
+//appends to scene
+
+ascene.appendChild(abox);
+ascene.appendChild(acylinder);
+ascene.appendChild(ass_entity);
+//ascene.appendChild(ass_entity_sky);
+
+//ascene.appendChild(entityEl);
+//ascene.appendChild(gltf);
+
+// add lights to scene 
+ascene.appendChild(ambientLight);
+ascene.appendChild(directionalLight);
+
+
+// html elements that are not needed right now
+
+// const para = document.createElement("p");
+// const node = document.createTextNode("This is new.");
+// para.appendChild(node);
+
+// const element = document.getElementById("div1");
+// element.appendChild(para);
+
+
+</script>
+
+</body>
+</html>
